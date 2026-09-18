@@ -1,0 +1,52 @@
+{
+  "skill_name": "to-obsidian-doc",
+  "evals": [
+    {
+      "id": 0,
+      "name": "docker-note-explicit-folder",
+      "prompt": "帮我把下面这段整理成笔记存进 Obsidian：Docker 的 bridge 网络默认给容器分配 172.17.0.0/16 网段，容器之间可以用 IP 互相访问，但容器名不能直接解析。要按名字访问得用自定义网络，先 docker network create mynet，然后 docker run --network mynet 起容器，这时候 Docker 内置的 DNS 就能把容器名解析成 IP 了。注意默认的 bridge 网络不支持这个，只有自定义网络才有。上次就是因为这个卡了半天，报错是 ping: bad address 'web'。存到 操作系统/Docker 里。",
+      "expected_output": "一篇写入 操作系统/Docker/ 的 Markdown 笔记，frontmatter 里不超过 5 个扁平标签（复用 vault 已有的 docker），平实语言，保留 docker network create mynet 和 ping: bad address 'web' 等具体细节",
+      "files": [],
+      "expectations": [
+        "实际写出了 .md 笔记文件（不是只在对话里回复内容）",
+        "frontmatter 里 tags 是不超过 5 个的 YAML 列表",
+        "没有任何标签包含 /（没有多级标签）",
+        "复用了 vault 里已存在的 docker 标签，大小写与 vault 一致",
+        "正文保留了具体命令 docker network create mynet",
+        "正文保留了原始报错文本 ping: bad address 'web'",
+        "正文没有套话：赋能/闭环/抓手/综上所述/值得注意的是/不难发现",
+        "笔记有 frontmatter 和一级标题，不是把原文直接贴一遍"
+      ]
+    },
+    {
+      "id": 1,
+      "name": "npm-vs-pnpm-canvas",
+      "prompt": "把这段总结成 Obsidian 笔记，放到 全栈 里。对比一下 npm 和 pnpm 装依赖的区别：npm 每个项目复制一份 node_modules，磁盘占用大，装 40 个包大概 200MB；pnpm 用全局 store 加硬链接，同样的依赖只占一份，40 个包大概 60MB。npm 装的时候会跑完整的依赖树解析，慢；pnpm 在这块快一些。pnpm 的坑是对软链接敏感的工具会出问题，比如某些老的打包器。npm 的坑是幽灵依赖，因为扁平化 node_modules，能 import 到没写在 package.json 里的包。",
+      "expected_output": "一篇笔记 + 一张 .canvas 对比图；canvas 只用预设色或中灰描边，文字无颜色无描边；正文嵌入 canvas",
+      "files": [],
+      "expectations": [
+        "实际写出了 .md 笔记文件",
+        "额外生成了 .canvas 文件",
+        "canvas 是合法 JSON，且每条边的 fromNode/toNode 都能对应到真实节点 id",
+        "canvas 里所有 color 值都是预设 \"1\"-\"6\" 或中灰档，没有深色/浅色十六进制（如 #000、#fff、#1a1a2e）",
+        "canvas 文本节点里没有 -webkit-text-stroke、text-shadow，也没有给文字设 color",
+        "笔记正文用 ![[...]] 或 wikilink 引用了这张 canvas",
+        "笔记标签不超过 5 个且都不含 /",
+        "正文保留了具体数字 200MB、60MB、40 个包"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "no-folder-specified-inference",
+      "prompt": "把这段存到我的笔记库里：Windows 上用 taskkill 结束占用端口的进程，先 netstat -ano | findstr :3000 找到 PID，再 taskkill /PID <pid> /F。PowerShell 里可以用 Get-NetTCPConnection -LocalPort 3000。",
+      "expected_output": "不应静默写入。应推断出 操作系统/Windows 并给出推断结果等待用户确认，或直接询问目标文件夹",
+      "files": [],
+      "expectations": [
+        "没有静默写入笔记文件（用户没指定文件夹时不应擅自猜测落盘）",
+        "明确向用户提出了目标文件夹的确认问题，或给出了推断结果并等待确认",
+        "推断的文件夹是 操作系统/Windows 或与之等价的合理位置",
+        "保留了两条具体命令 netstat -ano | findstr :3000 和 taskkill /PID <pid> /F"
+      ]
+    }
+  ]
+}
